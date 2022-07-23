@@ -122,7 +122,6 @@ public class OrderHeader extends BaseEntity {
         result = 31 * result + (getShippingAddress() != null ? getShippingAddress().hashCode() : 0);
         result = 31 * result + (getBillToAddress() != null ? getBillToAddress().hashCode() : 0);
         result = 31 * result + (getOrderStatus() != null ? getOrderStatus().hashCode() : 0);
-        result = 31 * result + (getOrderLines() != null ? getOrderLines().hashCode() : 0);
         return result;
     }
 }
