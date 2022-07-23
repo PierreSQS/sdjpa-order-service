@@ -25,7 +25,8 @@ class OrderHeaderRepositoryTest {
     @Test
     void testSaveOrderWithLine() {
         Timestamp createdDate = new Timestamp(61619354100000L);
-        System.out.println(createdDate.getTime());
+        System.out.printf("%n####### the created date: %s ########%n",createdDate);
+        System.out.printf("####### the created date as long: %d ########%n%n",createdDate.getTime());
         OrderHeader orderHeader = new OrderHeader();
         orderHeader.setCustomer("New Customer");
 
@@ -48,7 +49,7 @@ class OrderHeaderRepositoryTest {
         assertNotNull(savedOrder);
         assertNotNull(savedOrder.getId());
         assertNotNull(savedOrder.getOrderLines());
-        assertEquals(1, savedOrder.getOrderLines().size());
+        assertEquals(2, savedOrder.getOrderLines().size());
     }
 
     @Test
