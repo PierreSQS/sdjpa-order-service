@@ -29,7 +29,7 @@ class OrderHeaderRepositoryTest {
         System.out.printf("####### the created date as long: %d ########%n%n",createdDate.getTime());
         OrderHeader orderHeader = new OrderHeader();
         orderHeader.setCustomer("New Customer");
-        OrderHeader savedOrder = orderHeaderRepository.save(orderHeader);
+
 
         OrderLine orderLine1 = new OrderLine();
         orderLine1.setQuantityOrdered(5);
@@ -41,9 +41,10 @@ class OrderHeaderRepositoryTest {
         orderLine1.setOrderHeader(orderHeader);
         orderLine2.setOrderHeader(orderHeader);
         orderHeader.setOrderLines(Set.of(orderLine1,orderLine2));
+        OrderHeader savedOrder = orderHeaderRepository.save(orderHeader);
 
-
-        System.out.printf("%n####### the created date from the DB: %s ########%n%n",orderLine2.getCreatedDate());
+        System.out.printf("%n####### the created date from the DB: %s ########%n%n",
+                savedOrder.getCreatedDate());
 
 
         assertNotNull(savedOrder);
