@@ -7,7 +7,7 @@ import org.springframework.context.ApplicationContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Disabled // not configured...
+@Disabled("Migration Scripts not compatible with H2")
 @SpringBootTest
 class SdjpaOrderServiceApplicationTests {
 
