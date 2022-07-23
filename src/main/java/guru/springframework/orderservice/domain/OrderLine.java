@@ -1,6 +1,7 @@
 package guru.springframework.orderservice.domain;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 /**
@@ -13,6 +14,18 @@ public class OrderLine extends BaseEntity {
 
     @ManyToOne
     private OrderHeader orderHeader;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 
     public Integer getQuantityOrdered() {
         return quantityOrdered;
@@ -33,21 +46,24 @@ public class OrderLine extends BaseEntity {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof OrderLine)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
 
         OrderLine orderLine = (OrderLine) o;
 
-        if (getQuantityOrdered() != null ? !getQuantityOrdered().equals(orderLine.getQuantityOrdered()) : orderLine.getQuantityOrdered() != null)
+        if (quantityOrdered != null ? !quantityOrdered.equals(orderLine.quantityOrdered) : orderLine.quantityOrdered != null)
             return false;
-        return getOrderHeader() != null ? getOrderHeader().equals(orderLine.getOrderHeader()) : orderLine.getOrderHeader() == null;
+        if (orderHeader != null ? !orderHeader.equals(orderLine.orderHeader) : orderLine.orderHeader != null)
+            return false;
+        return product != null ? product.equals(orderLine.product) : orderLine.product == null;
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (getQuantityOrdered() != null ? getQuantityOrdered().hashCode() : 0);
-        result = 31 * result + (getOrderHeader() != null ? getOrderHeader().hashCode() : 0);
+        result = 31 * result + (quantityOrdered != null ? quantityOrdered.hashCode() : 0);
+        result = 31 * result + (orderHeader != null ? orderHeader.hashCode() : 0);
+        result = 31 * result + (product != null ? product.hashCode() : 0);
         return result;
     }
 }
