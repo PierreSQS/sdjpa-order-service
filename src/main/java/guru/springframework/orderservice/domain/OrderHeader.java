@@ -2,6 +2,7 @@ package guru.springframework.orderservice.domain;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import jakarta.persistence.*;
 
@@ -43,8 +44,6 @@ import jakarta.persistence.*;
 )
 public class OrderHeader extends BaseEntity {
 
-    private String customer;
-
     @Embedded
     private Address shippingAddress;
 
@@ -57,6 +56,10 @@ public class OrderHeader extends BaseEntity {
     @OneToMany(mappedBy = "orderHeader", cascade = CascadeType.PERSIST)
     private Set<OrderLine> orderLines;
 
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
+
     public void addOrderLine(OrderLine... newOrderLines) {
         if (orderLines == null) {
             orderLines = new HashSet<>();
@@ -68,11 +71,11 @@ public class OrderHeader extends BaseEntity {
         });
     }
 
-    public String getCustomer() {
+    public Customer getCustomer() {
         return customer;
     }
 
-    public void setCustomer(String customer) {
+    public void setCustomer(Customer customer) {
         this.customer = customer;
     }
 
@@ -111,28 +114,24 @@ public class OrderHeader extends BaseEntity {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof OrderHeader)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
 
         OrderHeader that = (OrderHeader) o;
 
-        if (getCustomer() != null ? !getCustomer().equals(that.getCustomer()) : that.getCustomer() != null)
+        if (!Objects.equals(shippingAddress, that.shippingAddress))
             return false;
-        if (getShippingAddress() != null ? !getShippingAddress().equals(that.getShippingAddress()) : that.getShippingAddress() != null)
+        if (!Objects.equals(billToAddress, that.billToAddress))
             return false;
-        if (getBillToAddress() != null ? !getBillToAddress().equals(that.getBillToAddress()) : that.getBillToAddress() != null)
-            return false;
-        if (getOrderStatus() != that.getOrderStatus()) return false;
-        return getOrderLines() != null ? getOrderLines().equals(that.getOrderLines()) : that.getOrderLines() == null;
+        return orderStatus == that.orderStatus;
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (getCustomer() != null ? getCustomer().hashCode() : 0);
-        result = 31 * result + (getShippingAddress() != null ? getShippingAddress().hashCode() : 0);
-        result = 31 * result + (getBillToAddress() != null ? getBillToAddress().hashCode() : 0);
-        result = 31 * result + (getOrderStatus() != null ? getOrderStatus().hashCode() : 0);
+        result = 31 * result + (shippingAddress != null ? shippingAddress.hashCode() : 0);
+        result = 31 * result + (billToAddress != null ? billToAddress.hashCode() : 0);
+        result = 31 * result + (orderStatus != null ? orderStatus.hashCode() : 0);
         return result;
     }
 }

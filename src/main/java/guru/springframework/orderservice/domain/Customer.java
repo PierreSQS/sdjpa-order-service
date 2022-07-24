@@ -1,6 +1,7 @@
 package guru.springframework.orderservice.domain;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 
 import java.util.Objects;
 import java.util.Set;
@@ -9,6 +10,7 @@ import java.util.Set;
 public class Customer extends BaseEntity {
     private String contactInfo;
 
+    @OneToMany(mappedBy = "customer",targetEntity = OrderHeader.class)
     private Set<OrderHeader> orderHeaders;
 
     public String getContactInfo() {
