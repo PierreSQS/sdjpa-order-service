@@ -60,17 +60,6 @@ public class OrderHeader extends BaseEntity {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    public void addOrderLine(OrderLine... newOrderLines) {
-        if (orderLines == null) {
-            orderLines = new HashSet<>();
-        }
-
-        Arrays.stream(newOrderLines).forEach(orderLine -> {
-            orderLines.add(orderLine);
-            orderLine.setOrderHeader(this);
-        });
-    }
-
     public Customer getCustomer() {
         return customer;
     }
@@ -107,8 +96,15 @@ public class OrderHeader extends BaseEntity {
         return orderLines;
     }
 
-    public void setOrderLines(Set<OrderLine> orderLines) {
-        this.orderLines = orderLines;
+    public void addOrderLine(OrderLine... newOrderLines) {
+        if (orderLines == null) {
+            orderLines = new HashSet<>();
+        }
+
+        Arrays.stream(newOrderLines).forEach(orderLine -> {
+            orderLines.add(orderLine);
+            orderLine.setOrderHeader(this);
+        });
     }
 
     @Override

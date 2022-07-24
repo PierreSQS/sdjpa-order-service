@@ -3,6 +3,8 @@ package guru.springframework.orderservice.domain;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -25,8 +27,15 @@ public class Customer extends BaseEntity {
         return orderHeaders;
     }
 
-    public void setOrderHeaders(Set<OrderHeader> orderHeaders) {
-        this.orderHeaders = orderHeaders;
+    public void addOrderHeader(OrderHeader... newOrderHeader) {
+        if (orderHeaders == null) {
+            orderHeaders = new HashSet<>();
+        }
+
+        Arrays.stream(newOrderHeader).forEach(orderHeader -> {
+            orderHeaders.add(orderHeader);
+            orderHeader.setCustomer(this);
+        });
     }
 
     @Override
