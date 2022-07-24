@@ -2,6 +2,9 @@ package guru.springframework.orderservice.repositories;
 
 import guru.springframework.orderservice.domain.OrderHeader;
 import guru.springframework.orderservice.domain.OrderLine;
+import guru.springframework.orderservice.domain.Product;
+import guru.springframework.orderservice.domain.ProductStatus;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -9,8 +12,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 import java.util.Set;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -21,6 +26,19 @@ class OrderHeaderRepositoryTest {
 
     @Autowired
     OrderHeaderRepository orderHeaderRepository;
+
+    @Autowired
+    ProductRepository productRepository;
+
+    Product newProduct;
+
+    @BeforeEach
+    void setUp() {
+        Product productToSave = new Product();
+        productToSave.setProductStatus(ProductStatus.NEW);
+        productToSave.setDescription("Test Product");
+        newProduct = productRepository.save(productToSave);
+    }
 
     @Test
     void testSaveOrderWithLine() {
@@ -33,6 +51,7 @@ class OrderHeaderRepositoryTest {
 
         OrderLine orderLine1 = new OrderLine();
         orderLine1.setQuantityOrdered(5);
+        orderLine1.setProduct(newProduct);
 
         OrderLine orderLine2 = new OrderLine();
         orderLine2.setQuantityOrdered(5);
@@ -46,11 +65,16 @@ class OrderHeaderRepositoryTest {
         System.out.printf("%n####### the created date from the DB: %s ########%n%n",
                 savedOrder.getCreatedDate());
 
+        Long fetchedProdId = orderLine1.getProduct().getId();
+
+        Product fetchedProd = productRepository.findById(fetchedProdId).orElse(null);
+
 
         assertNotNull(savedOrder);
         assertNotNull(savedOrder.getId());
         assertNotNull(savedOrder.getOrderLines());
         assertEquals(2, savedOrder.getOrderLines().size());
+        assertThat(Objects.requireNonNull(fetchedProd).getDescription()).isEqualTo("Test Product");
     }
 
     @Test
