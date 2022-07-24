@@ -1,9 +1,6 @@
 package guru.springframework.orderservice.repositories;
 
-import guru.springframework.orderservice.domain.OrderHeader;
-import guru.springframework.orderservice.domain.OrderLine;
-import guru.springframework.orderservice.domain.Product;
-import guru.springframework.orderservice.domain.ProductStatus;
+import guru.springframework.orderservice.domain.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,20 +28,26 @@ class OrderHeaderRepositoryTest {
 
     Product newProduct;
 
+    Customer customer;
+
     @BeforeEach
     void setUp() {
         Product productToSave = new Product();
         productToSave.setProductStatus(ProductStatus.NEW);
         productToSave.setDescription("Test Product");
         newProduct = productRepository.save(productToSave);
+
+        customer = new Customer();
+        customer.setContactInfo("Test Customer");
     }
 
     @Test
     void testSaveOrderWithLine() {
         LocalDateTime createdDate = LocalDateTime.now();
         System.out.printf("%n####### the date set in the test: %s ########%n",createdDate);
+
         OrderHeader orderHeader = new OrderHeader();
-        orderHeader.setCustomer("New Customer");
+        orderHeader.setCustomer(customer);
 
 
         OrderLine orderLine1 = new OrderLine();
@@ -76,7 +79,7 @@ class OrderHeaderRepositoryTest {
     @Test
     void testSaveOrder() {
         OrderHeader orderHeader = new OrderHeader();
-        orderHeader.setCustomer("New Customer");
+        orderHeader.setCustomer(customer);
         OrderHeader savedOrder = orderHeaderRepository.save(orderHeader);
 
         assertNotNull(savedOrder);
@@ -89,5 +92,6 @@ class OrderHeaderRepositoryTest {
         assertNotNull(fetchedOrder.getId());
         assertNotNull(fetchedOrder.getCreatedDate());
         assertNotNull(fetchedOrder.getLastModifiedDate());
+        assertThat(fetchedOrder.getCustomer().getContactInfo()).isEqualTo("Test Customer");
     }
 }
