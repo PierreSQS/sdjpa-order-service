@@ -11,7 +11,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,9 +41,8 @@ class OrderHeaderRepositoryTest {
 
     @Test
     void testSaveOrderWithLine() {
-        Timestamp createdDate = new Timestamp(61619354100000L);
-        System.out.printf("%n####### the created date: %s ########%n",createdDate);
-        System.out.printf("####### the created date as long: %d ########%n%n",createdDate.getTime());
+        LocalDateTime createdDate = LocalDateTime.now();
+        System.out.printf("%n####### the date set in the test: %s ########%n",createdDate);
         OrderHeader orderHeader = new OrderHeader();
         orderHeader.setCustomer("New Customer");
 
