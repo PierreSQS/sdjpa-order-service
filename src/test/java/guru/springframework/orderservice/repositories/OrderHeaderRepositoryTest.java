@@ -13,10 +13,9 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.sql.Timestamp;
 import java.util.Objects;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ActiveProfiles("local")
@@ -57,9 +56,7 @@ class OrderHeaderRepositoryTest {
         orderLine2.setQuantityOrdered(5);
         orderLine2.setCreatedDate(createdDate);
 
-        orderLine1.setOrderHeader(orderHeader);
-        orderLine2.setOrderHeader(orderHeader);
-        orderHeader.setOrderLines(Set.of(orderLine1,orderLine2));
+        orderHeader.addOrderLine(orderLine1,orderLine2);
         OrderHeader savedOrder = orderHeaderRepository.save(orderHeader);
 
         System.out.printf("%n####### the created date from the DB: %s ########%n%n",
