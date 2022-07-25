@@ -60,7 +60,7 @@ class OrderHeaderRepositoryTest {
         orderLine2.setCreatedDate(createdDate);
         orderLine2.setProduct(newProduct);
 
-        orderHeader.addOrderLine(orderLine1,orderLine2);
+        orderHeader.addOrderLines(orderLine1,orderLine2);
 
         OrderHeader savedOrder = orderHeaderRepository.save(orderHeader);
         orderHeaderRepository.flush();

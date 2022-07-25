@@ -58,18 +58,6 @@ public class OrderHeader extends BaseEntity {
     @ManyToOne(targetEntity = Customer.class)
     private Customer customer;
 
-    public void addOrderLine(OrderLine... newOrderLines) {
-        if (orderLines == null) {
-            orderLines = new HashSet<>();
-        }
-
-        Arrays.stream(newOrderLines).forEach(newOrderLine -> {
-            orderLines.add(newOrderLine);
-            newOrderLine.setOrderHeader(this);
-        });
-
-    }
-
     public Customer getCustomer() {
         return customer;
     }
@@ -106,8 +94,16 @@ public class OrderHeader extends BaseEntity {
         return orderLines;
     }
 
-    public void setOrderLines(Set<OrderLine> orderLines) {
-        this.orderLines = orderLines;
+    public void addOrderLines(OrderLine... newOrderLines) {
+        if (orderLines == null) {
+            orderLines = new HashSet<>();
+        }
+
+        Arrays.stream(newOrderLines).forEach(newOrderLine -> {
+            orderLines.add(newOrderLine);
+            newOrderLine.setOrderHeader(this);
+        });
+
     }
 
     @Override
