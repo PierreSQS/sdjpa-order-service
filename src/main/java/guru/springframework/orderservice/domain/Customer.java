@@ -24,7 +24,7 @@ public class Customer extends BaseEntity {
     private String phone;
     private String email;
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customer",targetEntity = OrderHeader.class)
     private Set<OrderHeader> orders;
 
     public String getCustomerName() {
