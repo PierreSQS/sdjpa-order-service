@@ -29,6 +29,9 @@ class OrderHeaderRepositoryTest {
     @Autowired
     ProductRepository productRepository;
 
+    @Autowired
+    OrderApprovalRepository orderApprovalRepo;
+
     Product newProduct;
 
     @BeforeEach
@@ -61,6 +64,11 @@ class OrderHeaderRepositoryTest {
         orderLine2.setProduct(newProduct);
 
         orderHeader.addOrderLines(orderLine1,orderLine2);
+        OrderApproval orderApproval = new OrderApproval();
+        orderApproval.setApprovedBy("Pierrot");
+        OrderApproval savedApproval = orderApprovalRepo.save(orderApproval);
+
+        orderHeader.setOrderApproval(orderApproval);
 
         OrderHeader savedOrder = orderHeaderRepository.save(orderHeader);
         orderHeaderRepository.flush();
@@ -80,6 +88,10 @@ class OrderHeaderRepositoryTest {
                 .contains("TEST PRODUCT");
 
         OrderHeader fetchedOrder = orderHeaderRepository.findById(savedOrder.getId()).orElse(null);
+
+        assertThat(fetchedOrder.getOrderApproval())
+                .extracting("approvedBy")
+                .isEqualTo("Pierrot");
 
         assertNotNull(fetchedOrder);
         assertEquals(2, fetchedOrder.getOrderLines().size());
