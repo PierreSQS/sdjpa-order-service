@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -141,10 +142,12 @@ class OrderHeaderRepositoryTest {
         OrderHeader savedOrder = orderHeaderRepository.saveAndFlush(orderHeader);
         System.out.println("###### order saved and flushed ######");
 
-        orderHeaderRepository.deleteById(savedOrder.getId());
+        Long orderIdToDelete = savedOrder.getId();
+
+        orderHeaderRepository.deleteById(orderIdToDelete);
         orderHeaderRepository.flush();
 
-
-
+        Optional<OrderHeader> foundOrderOpt = orderHeaderRepository.findById(orderIdToDelete);
+        assertThat(foundOrderOpt).isEmpty();
     }
 }
