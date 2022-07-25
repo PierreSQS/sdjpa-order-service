@@ -8,8 +8,10 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -27,18 +29,21 @@ class OrderHeaderRepositoryTest {
     @Autowired
     ProductRepository productRepository;
 
-    Product product;
+    Product newProduct;
 
     @BeforeEach
     void setUp() {
-        Product newProduct = new Product();
-        newProduct.setProductStatus(ProductStatus.NEW);
-        newProduct.setDescription("test product");
-        product = productRepository.saveAndFlush(newProduct);
+        Product productToSave = new Product();
+        productToSave.setProductStatus(ProductStatus.NEW);
+        productToSave.setDescription("TEST PRODUCT");
+        this.newProduct = productRepository.saveAndFlush(productToSave);
     }
 
     @Test
     void testSaveOrderWithLine() {
+        LocalDateTime createdDate = LocalDateTime.now();
+        System.out.printf("%n####### the date set in the test: %s ########%n",createdDate);
+
         OrderHeader orderHeader = new OrderHeader();
         Customer customer = new Customer();
         customer.setCustomerName("New Customer");
@@ -46,25 +51,38 @@ class OrderHeaderRepositoryTest {
 
         orderHeader.setCustomer(savedCustomer);
 
-        OrderLine orderLine = new OrderLine();
-        orderLine.setQuantityOrdered(5);
-        orderLine.setProduct(product);
+        OrderLine orderLine1 = new OrderLine();
+        orderLine1.setQuantityOrdered(5);
+        orderLine1.setProduct(newProduct);
 
-        orderHeader.addOrderLine(orderLine);
+        OrderLine orderLine2 = new OrderLine();
+        orderLine2.setQuantityOrdered(3);
+        orderLine2.setCreatedDate(createdDate);
+        orderLine2.setProduct(newProduct);
+
+        orderHeader.addOrderLine(orderLine1,orderLine2);
 
         OrderHeader savedOrder = orderHeaderRepository.save(orderHeader);
-
         orderHeaderRepository.flush();
+
+        System.out.printf("%n####### the created date from the DB: %s ########%n%n",
+                savedOrder.getCreatedDate());
 
         assertNotNull(savedOrder);
         assertNotNull(savedOrder.getId());
         assertNotNull(savedOrder.getOrderLines());
-        assertEquals(savedOrder.getOrderLines().size(), 1);
+        assertEquals(2, savedOrder.getOrderLines().size());
 
-        OrderHeader fetchedOrder = orderHeaderRepository.getById(savedOrder.getId());
+        // additional assertion to practice on assertJ.
+        Set<OrderLine> orderLines = savedOrder.getOrderLines();
+        assertThat(orderLines)
+                .extracting(orderLine -> orderLine.getProduct().getDescription())
+                .contains("TEST PRODUCT");
+
+        OrderHeader fetchedOrder = orderHeaderRepository.findById(savedOrder.getId()).orElse(null);
 
         assertNotNull(fetchedOrder);
-        assertEquals(fetchedOrder.getOrderLines().size(), 1);
+        assertEquals(2, fetchedOrder.getOrderLines().size());
     }
 
     @Test
@@ -80,7 +98,8 @@ class OrderHeaderRepositoryTest {
         assertNotNull(savedOrder);
         assertNotNull(savedOrder.getId());
 
-        OrderHeader fetchedOrder = orderHeaderRepository.getById(savedOrder.getId());
+        OrderHeader fetchedOrder = orderHeaderRepository
+                .findById(savedOrder.getId()).orElse(null);
 
         assertNotNull(fetchedOrder);
         assertNotNull(fetchedOrder.getId());
