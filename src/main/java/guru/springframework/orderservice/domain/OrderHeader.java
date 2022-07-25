@@ -121,10 +121,8 @@ public class OrderHeader extends BaseEntity {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof OrderHeader)) return false;
+        if (!(o instanceof OrderHeader that)) return false;
         if (!super.equals(o)) return false;
-
-        OrderHeader that = (OrderHeader) o;
 
         if (getCustomer() != null ? !getCustomer().equals(that.getCustomer()) : that.getCustomer() != null)
             return false;
