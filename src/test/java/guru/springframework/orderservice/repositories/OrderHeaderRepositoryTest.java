@@ -142,6 +142,7 @@ class OrderHeaderRepositoryTest {
         System.out.println("###### order saved and flushed ######");
 
         orderHeaderRepository.deleteById(savedOrder.getId());
+        orderHeaderRepository.flush();
 
 
 
