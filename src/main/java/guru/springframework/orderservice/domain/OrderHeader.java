@@ -58,6 +58,18 @@ public class OrderHeader extends BaseEntity {
     @ManyToOne(targetEntity = Customer.class)
     private Customer customer;
 
+    @OneToOne
+    @JoinColumn(name = "order_approval_id")
+    private OrderApproval orderApproval;
+
+    public OrderApproval getOrderApproval() {
+        return orderApproval;
+    }
+
+    public void setOrderApproval(OrderApproval orderApproval) {
+        this.orderApproval = orderApproval;
+    }
+
     public Customer getCustomer() {
         return customer;
     }
