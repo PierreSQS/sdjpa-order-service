@@ -55,7 +55,7 @@ public class OrderHeader extends BaseEntity {
     @OneToMany(mappedBy = "orderHeader", cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
     private Set<OrderLine> orderLines;
 
-    @ManyToOne(targetEntity = Customer.class)
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Customer.class)
     private Customer customer;
 
     @OneToOne(mappedBy = "orderHeader", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
