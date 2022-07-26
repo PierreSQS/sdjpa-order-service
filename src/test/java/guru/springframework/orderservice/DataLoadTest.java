@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Created by jt on 5/28/22.
+ * Modified by Pierrot on 7/26/22.
  */
 @ActiveProfiles("local")
 @DataJpaTest
@@ -65,7 +65,7 @@ public class DataLoadTest {
             OrderLine orderLine = new OrderLine();
             orderLine.setProduct(product);
             orderLine.setQuantityOrdered(random.nextInt(20));
-            orderHeader.getOrderLines().add(orderLine);
+            orderHeader.addOrderLines(orderLine);
         });
 
         return orderHeaderRepository.save(orderHeader);

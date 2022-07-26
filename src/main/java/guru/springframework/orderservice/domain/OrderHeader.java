@@ -111,7 +111,9 @@ public class OrderHeader extends BaseEntity {
     }
 
     public void addOrderLines(OrderLine... newOrderLines) {
-
+        if (orderLines == null) {
+            orderLines = new HashSet<>();
+        }
         Arrays.stream(newOrderLines).forEach(newOrderLine -> {
             orderLines.add(newOrderLine);
             newOrderLine.setOrderHeader(this);
