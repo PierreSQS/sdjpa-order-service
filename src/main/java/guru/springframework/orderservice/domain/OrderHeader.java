@@ -58,7 +58,7 @@ public class OrderHeader extends BaseEntity {
     @ManyToOne(targetEntity = Customer.class)
     private Customer customer;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = CascadeType.PERSIST, orphanRemoval = true)
     @JoinColumn(name = "order_approval_id")
     private OrderApproval orderApproval;
 
