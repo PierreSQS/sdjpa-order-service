@@ -1,12 +1,29 @@
 package guru.springframework.orderservice.domain;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 
 import java.util.Objects;
 
+/**
+ * Modified by Pierrot on 7/26/22.
+ */
 @Entity
 public class OrderApproval extends BaseEntity{
     private String approvedBy;
+
+    @OneToOne
+    @JoinColumn(name = "order_header_id")
+    private OrderHeader orderHeader;
+
+    public OrderHeader getOrderHeader() {
+        return orderHeader;
+    }
+
+    public void setOrderHeader(OrderHeader orderHeader) {
+        this.orderHeader = orderHeader;
+    }
 
     public String getApprovedBy() {
         return approvedBy;

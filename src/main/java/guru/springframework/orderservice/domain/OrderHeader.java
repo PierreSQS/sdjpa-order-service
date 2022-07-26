@@ -6,7 +6,7 @@ import java.util.Set;
 import jakarta.persistence.*;
 
 /**
- * Modified by Pierrot on 7/25/22.
+ * Modified by Pierrot on 7/26/22.
  */
 @Entity
 @AttributeOverride(
@@ -58,7 +58,7 @@ public class OrderHeader extends BaseEntity {
     @ManyToOne(targetEntity = Customer.class)
     private Customer customer;
 
-    @OneToOne(cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @OneToOne(mappedBy = "orderHeader", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(name = "order_approval_id")
     private OrderApproval orderApproval;
 
@@ -68,6 +68,7 @@ public class OrderHeader extends BaseEntity {
 
     public void setOrderApproval(OrderApproval orderApproval) {
         this.orderApproval = orderApproval;
+        orderApproval.setOrderHeader(this);
     }
 
     public Customer getCustomer() {
