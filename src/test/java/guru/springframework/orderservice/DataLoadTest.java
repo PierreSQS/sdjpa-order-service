@@ -13,8 +13,10 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
+import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 /**
  * Modified by Pierrot on 7/26/22.
@@ -30,17 +32,31 @@ public class DataLoadTest {
     final String TEST_CUSTOMER = "TEST CUSTOMER";
 
     @Autowired
-    OrderHeaderRepository orderHeaderRepository;
+    OrderHeaderRepository orderHeaderRepo;
 
     @Autowired
-    CustomerRepository customerRepository;
+    CustomerRepository customerRepo;
 
     @Autowired
-    ProductRepository productRepository;
+    ProductRepository productRepo;
+
+    @Test
+    void testN_PlusOneProblem() {
+        Customer customer = customerRepo.
+                findCustomerByCustomerNameIgnoreCase(TEST_CUSTOMER).orElse(null);
+
+        IntSummaryStatistics totalOrdered = orderHeaderRepo.findAllByCustomer(customer)
+                .stream()
+                .flatMap(orderHeader -> orderHeader.getOrderLines().stream())
+                .collect(Collectors.summarizingInt(OrderLine::getQuantityOrdered));
+
+        System.out.printf("%n####### total ordered: %s #######%n%n", totalOrdered.getSum());
+
+    }
 
     @Test
     void testLazyVsEager() {
-        OrderHeader orderHeader = orderHeaderRepository.findById(5L).orElse(null);
+        OrderHeader orderHeader = orderHeaderRepo.findById(5L).orElse(null);
         System.out.printf("%n##### Order ID: %d%n",orderHeader.getId());
         System.out.printf("##### Customer Name: %s%n%n",orderHeader.getCustomer().getCustomerName());
     }
@@ -59,7 +75,7 @@ public class DataLoadTest {
             saveOrder(customer, products);
         }
 
-        orderHeaderRepository.flush();
+        orderHeaderRepo.flush();
     }
 
     private OrderHeader saveOrder(Customer customer, List<Product> products){
@@ -75,7 +91,7 @@ public class DataLoadTest {
             orderHeader.addOrderLines(orderLine);
         });
 
-        return orderHeaderRepository.save(orderHeader);
+        return orderHeaderRepo.save(orderHeader);
     }
 
     private Customer loadCustomers() {
@@ -83,7 +99,7 @@ public class DataLoadTest {
     }
 
     private Customer getOrSaveCustomer(String customerName) {
-        return customerRepository.findCustomerByCustomerNameIgnoreCase(customerName)
+        return customerRepo.findCustomerByCustomerNameIgnoreCase(customerName)
                 .orElseGet(() -> {
                     Customer c1 = new Customer();
                     c1.setCustomerName(customerName);
@@ -93,7 +109,7 @@ public class DataLoadTest {
                     address.setCity("New Orleans");
                     address.setState("LA");
                     c1.setAddress(address);
-                    return customerRepository.save(c1);
+                    return customerRepo.save(c1);
                 });
     }
     private List<Product> loadProducts(){
@@ -106,12 +122,12 @@ public class DataLoadTest {
         return products;
     }
     private Product getOrSaveProduct(String description) {
-        return productRepository.findByDescription(description)
+        return productRepo.findByDescription(description)
                 .orElseGet(() -> {
                     Product p1 = new Product();
                     p1.setDescription(description);
                     p1.setProductStatus(ProductStatus.NEW);
-                    return productRepository.save(p1);
+                    return productRepo.save(p1);
                 });
     }
 
