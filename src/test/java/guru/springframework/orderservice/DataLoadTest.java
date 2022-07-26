@@ -38,6 +38,13 @@ public class DataLoadTest {
     @Autowired
     ProductRepository productRepository;
 
+    @Test
+    void testLazyVsEager() {
+        OrderHeader orderHeader = orderHeaderRepository.findById(5L).orElse(null);
+        System.out.printf("%n##### Order ID: %d%n",orderHeader.getId());
+        System.out.printf("##### Customer Name: %s%n%n",orderHeader.getCustomer().getCustomerName());
+    }
+
     @Disabled("Disabled for convenience reasons, feel free to enable it if needed!!!")
     @Rollback(value = false)
     @Test
