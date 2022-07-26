@@ -104,13 +104,13 @@ public class OrderHeader extends BaseEntity {
     }
 
     public Set<OrderLine> getOrderLines() {
+        if (orderLines == null) {
+            orderLines = new HashSet<>();
+        }
         return orderLines;
     }
 
     public void addOrderLines(OrderLine... newOrderLines) {
-        if (orderLines == null) {
-            orderLines = new HashSet<>();
-        }
 
         Arrays.stream(newOrderLines).forEach(newOrderLine -> {
             orderLines.add(newOrderLine);
