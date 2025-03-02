@@ -10,6 +10,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import jakarta.persistence.EntityNotFoundException;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -64,12 +65,12 @@ class OrderHeaderRepositoryTest {
         assertNotNull(savedOrder);
         assertNotNull(savedOrder.getId());
         assertNotNull(savedOrder.getOrderLines());
-        assertEquals(savedOrder.getOrderLines().size(), 1);
+        assertEquals(1, savedOrder.getOrderLines().size());
 
-        OrderHeader fetchedOrder = orderHeaderRepository.getById(savedOrder.getId());
-
+        OrderHeader fetchedOrder = orderHeaderRepository.findById(savedOrder.getId())
+                .orElseThrow(EntityNotFoundException::new);
         assertNotNull(fetchedOrder);
-        assertEquals(fetchedOrder.getOrderLines().size(), 1);
+        assertEquals(1, fetchedOrder.getOrderLines().size());
     }
 
     @Test
@@ -85,7 +86,8 @@ class OrderHeaderRepositoryTest {
         assertNotNull(savedOrder);
         assertNotNull(savedOrder.getId());
 
-        OrderHeader fetchedOrder = orderHeaderRepository.getById(savedOrder.getId());
+        OrderHeader fetchedOrder = orderHeaderRepository.findById(savedOrder.getId())
+                .orElseThrow(EntityNotFoundException::new);
 
         assertNotNull(fetchedOrder);
         assertNotNull(fetchedOrder.getId());
@@ -114,14 +116,13 @@ class OrderHeaderRepositoryTest {
 
         System.out.println("order saved and flushed");
 
-        orderHeaderRepository.deleteById(savedOrder.getId());
+        Long savedOrderId = savedOrder.getId();
+        orderHeaderRepository.deleteById(savedOrderId);
         orderHeaderRepository.flush();
 
-        assertThrows(EntityNotFoundException.class, () -> {
-            OrderHeader fetchedOrder = orderHeaderRepository.getById(savedOrder.getId());
-
-            assertNull(fetchedOrder);
-        });
+        assertThatThrownBy(() -> orderHeaderRepository.findById(savedOrderId)
+                .orElseThrow(EntityNotFoundException::new))
+                .isInstanceOf(EntityNotFoundException.class);
     }
 
 }
