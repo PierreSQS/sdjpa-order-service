@@ -113,7 +113,7 @@ public class OrderHeader extends BaseEntity {
     public void addOrderLines(OrderLine... newOrderLines) {
 
         Arrays.stream(newOrderLines).forEach(newOrderLine -> {
-            orderLines.add(newOrderLine);
+            this.getOrderLines().add(newOrderLine);
             newOrderLine.setOrderHeader(this);
         });
 
