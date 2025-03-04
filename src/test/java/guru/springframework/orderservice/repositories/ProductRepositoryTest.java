@@ -19,7 +19,7 @@ class ProductRepositoryTest {
 
     @Test
     void testGetCategory() {
-        Product product = productRepository.findByDescription("PRODUCT1").get();
+        Product product = productRepository.findByDescription("PRODUCT1").orElse(null);
 
         assertNotNull(product);
         assertNotNull(product.getCategories());
@@ -34,7 +34,7 @@ class ProductRepositoryTest {
 
         Product savedProduct = productRepository.save(product);
 
-        Product fetchedProduct = productRepository.getById(savedProduct.getId());
+        Product fetchedProduct = productRepository.findById(savedProduct.getId()).orElse(null);
 
         assertNotNull(fetchedProduct);
         assertNotNull(fetchedProduct.getDescription());

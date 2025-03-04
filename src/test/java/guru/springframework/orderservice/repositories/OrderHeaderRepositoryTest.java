@@ -64,12 +64,12 @@ class OrderHeaderRepositoryTest {
         assertNotNull(savedOrder);
         assertNotNull(savedOrder.getId());
         assertNotNull(savedOrder.getOrderLines());
-        assertEquals(savedOrder.getOrderLines().size(), 1);
+        assertEquals(1, savedOrder.getOrderLines().size());
 
-        OrderHeader fetchedOrder = orderHeaderRepository.getById(savedOrder.getId());
+        OrderHeader fetchedOrder = orderHeaderRepository.findById(savedOrder.getId()).orElse(null);
 
         assertNotNull(fetchedOrder);
-        assertEquals(fetchedOrder.getOrderLines().size(), 1);
+        assertEquals(1, fetchedOrder.getOrderLines().size());
     }
 
     @Test
@@ -85,7 +85,7 @@ class OrderHeaderRepositoryTest {
         assertNotNull(savedOrder);
         assertNotNull(savedOrder.getId());
 
-        OrderHeader fetchedOrder = orderHeaderRepository.getById(savedOrder.getId());
+        OrderHeader fetchedOrder = orderHeaderRepository.findById(savedOrder.getId()).orElse(null);
 
         assertNotNull(fetchedOrder);
         assertNotNull(fetchedOrder.getId());

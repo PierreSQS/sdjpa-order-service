@@ -17,17 +17,17 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Created by jt on 5/28/22.
+ * Modified by Pierrot on 04-05-2025.
  */
 @ActiveProfiles("local")
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class DataLoadTest {
-    final String PRODUCT_D1 = "Product 1";
-    final String PRODUCT_D2 = "Product 2";
-    final String PRODUCT_D3 = "Product 3";
+class DataLoadTest {
+    static final String PRODUCT1 = "Product 1";
+    static final String PRODUCT2 = "Product 2";
+    static final String PRODUCT3 = "Product 3";
 
-    final String TEST_CUSTOMER = "TEST CUSTOMER";
+    static final String TESTCUSTOMER = "TEST CUSTOMER";
 
     @Autowired
     OrderHeaderRepository orderHeaderRepository;
@@ -38,7 +38,7 @@ public class DataLoadTest {
     @Autowired
     ProductRepository productRepository;
 
-    @Disabled
+    @Disabled("Only used for loading data - can be re-enabled if needed")
     @Rollback(value = false)
     @Test
     void testDataLoader() {
@@ -72,7 +72,7 @@ public class DataLoadTest {
     }
 
     private Customer loadCustomers() {
-        return getOrSaveCustomer(TEST_CUSTOMER);
+        return getOrSaveCustomer(TESTCUSTOMER);
     }
 
     private Customer getOrSaveCustomer(String customerName) {
@@ -92,9 +92,9 @@ public class DataLoadTest {
     private List<Product> loadProducts(){
         List<Product> products = new ArrayList<>();
 
-        products.add(getOrSaveProduct(PRODUCT_D1));
-        products.add(getOrSaveProduct(PRODUCT_D2));
-        products.add(getOrSaveProduct(PRODUCT_D3));
+        products.add(getOrSaveProduct(PRODUCT1));
+        products.add(getOrSaveProduct(PRODUCT2));
+        products.add(getOrSaveProduct(PRODUCT3));
 
         return products;
     }
