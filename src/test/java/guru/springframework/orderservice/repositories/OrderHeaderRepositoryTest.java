@@ -10,6 +10,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import jakarta.persistence.EntityNotFoundException;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -114,14 +115,14 @@ class OrderHeaderRepositoryTest {
 
         System.out.println("order saved and flushed");
 
-        orderHeaderRepository.deleteById(savedOrder.getId());
+        Long savedOrderId = savedOrder.getId();
+        orderHeaderRepository.deleteById(savedOrderId);
         orderHeaderRepository.flush();
 
-        assertThrows(EntityNotFoundException.class, () -> {
-            OrderHeader fetchedOrder = orderHeaderRepository.getById(savedOrder.getId());
-
-            assertNull(fetchedOrder);
-        });
+        assertThatThrownBy(() -> orderHeaderRepository.findById(savedOrderId)
+                .orElseThrow(() -> new EntityNotFoundException("Entity with ID: " + savedOrderId + " not found")))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessageContaining("Entity with ID: " + savedOrderId + " not found");
     }
 
 }
