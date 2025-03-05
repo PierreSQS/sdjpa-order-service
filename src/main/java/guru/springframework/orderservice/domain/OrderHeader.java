@@ -1,47 +1,55 @@
 package guru.springframework.orderservice.domain;
 
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+
 import java.util.HashSet;
 import java.util.Set;
-import jakarta.persistence.*;
 
 /**
- * Created by jt on 12/5/21.
+ * Modified by Pierrot on 05-03-2025.
  */
 @Entity
-@AttributeOverrides({
-        @AttributeOverride(
-                name = "shippingAddress.address",
-                column = @Column(name = "shipping_address")
-        ),
-        @AttributeOverride(
-                name = "shippingAddress.city",
-                column = @Column(name = "shipping_city")
-        ),
-        @AttributeOverride(
-                name = "shippingAddress.state",
-                column = @Column(name = "shipping_state")
-        ),
-        @AttributeOverride(
-                name = "shippingAddress.zipCode",
-                column = @Column(name = "shipping_zip_code")
-        ),
-        @AttributeOverride(
-                name = "billToAddress.address",
-                column = @Column(name = "bill_to_address")
-        ),
-        @AttributeOverride(
-                name = "billToAddress.city",
-                column = @Column(name = "bill_to_city")
-        ),
-        @AttributeOverride(
-                name = "billToAddress.state",
-                column = @Column(name = "bill_to_state")
-        ),
-        @AttributeOverride(
-                name = "billToAddress.zipCode",
-                column = @Column(name = "bill_to_zip_code")
-        )
-})
+@AttributeOverride(
+        name = "shippingAddress.address",
+        column = @Column(name = "shipping_address")
+)
+@AttributeOverride(
+        name = "shippingAddress.city",
+        column = @Column(name = "shipping_city")
+)
+@AttributeOverride(
+        name = "shippingAddress.state",
+        column = @Column(name = "shipping_state")
+)
+@AttributeOverride(
+        name = "shippingAddress.zipCode",
+        column = @Column(name = "shipping_zip_code")
+)
+@AttributeOverride(
+        name = "billToAddress.address",
+        column = @Column(name = "bill_to_address")
+)
+@AttributeOverride(
+        name = "billToAddress.city",
+        column = @Column(name = "bill_to_city")
+)
+@AttributeOverride(
+        name = "billToAddress.state",
+        column = @Column(name = "bill_to_state")
+)
+@AttributeOverride(
+        name = "billToAddress.zipCode",
+        column = @Column(name = "bill_to_zip_code")
+)
 public class OrderHeader extends BaseEntity {
 
     @ManyToOne
@@ -123,19 +131,20 @@ public class OrderHeader extends BaseEntity {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof OrderHeader)) return false;
+        if (!(o instanceof OrderHeader that)) return false;
         if (!super.equals(o)) return false;
-
-        OrderHeader that = (OrderHeader) o;
 
         if (getCustomer() != null ? !getCustomer().equals(that.getCustomer()) : that.getCustomer() != null)
             return false;
-        if (getShippingAddress() != null ? !getShippingAddress().equals(that.getShippingAddress()) : that.getShippingAddress() != null)
+        if (getShippingAddress() != null ? !getShippingAddress().equals(that.getShippingAddress())
+                : that.getShippingAddress() != null)
             return false;
-        if (getBillToAddress() != null ? !getBillToAddress().equals(that.getBillToAddress()) : that.getBillToAddress() != null)
+        if (getBillToAddress() != null ? !getBillToAddress().equals(that.getBillToAddress())
+                : that.getBillToAddress() != null)
             return false;
         if (getOrderStatus() != that.getOrderStatus()) return false;
-        return getOrderLines() != null ? getOrderLines().equals(that.getOrderLines()) : that.getOrderLines() == null;
+        return getOrderLines() != null ? getOrderLines().equals(that.getOrderLines())
+                : that.getOrderLines() == null;
     }
 
     @Override
