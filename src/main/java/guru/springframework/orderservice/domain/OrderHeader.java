@@ -1,16 +1,28 @@
 package guru.springframework.orderservice.domain;
 
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import jakarta.persistence.*;
 
 /**
- * Modified by Pierrot on 7/26/22.
+ * Modified by Pierrot on 05-03-2025.
  */
 @Entity
 @AttributeOverride(
-        name = "shippingAddress.address",
+        name = "shippingAddress.street",
         column = @Column(name = "shipping_address")
 )
 @AttributeOverride(
@@ -26,7 +38,7 @@ import jakarta.persistence.*;
         column = @Column(name = "shipping_zip_code")
 )
 @AttributeOverride(
-        name = "billToAddress.address",
+        name = "billToAddress.street",
         column = @Column(name = "bill_to_address")
 )
 @AttributeOverride(

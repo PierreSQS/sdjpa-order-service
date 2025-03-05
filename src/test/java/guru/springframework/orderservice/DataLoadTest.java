@@ -113,7 +113,7 @@ class DataLoadTest {
                     c1.setCustomerName(customerName);
                     c1.setEmail("test@example.com");
                     Address address = new Address();
-                    address.setAddress("123 Main");
+                    address.setStreet("123 Main");
                     address.setCity("New Orleans");
                     address.setState("LA");
                     c1.setAddress(address);
