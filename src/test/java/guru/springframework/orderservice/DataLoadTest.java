@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * Modified by Pierrot on 04-05-2025.
  */
@@ -37,6 +39,19 @@ class DataLoadTest {
 
     @Autowired
     ProductRepository productRepository;
+
+    @Test
+    void testLazyVsEager() {
+        OrderHeader orderHeader = orderHeaderRepository.findById(52L).orElse(null);
+
+        assert orderHeader != null;
+        System.out.println("Order Id is: " + orderHeader.getId());
+
+        System.out.println("Customer Name is: " + orderHeader.getCustomer().getCustomerName());
+
+        assertThat(orderHeader.getId()).isNotNull();
+
+    }
 
     @Disabled("Only used for loading data - can be re-enabled if needed")
     @Rollback(value = false)

@@ -1,69 +1,83 @@
-select orderheade0_.id                 as id1_3_0_,
-       orderheade0_.created_date       as created_2_3_0_,
-       orderheade0_.last_modified_date as last_mod3_3_0_,
-       orderheade0_.bill_to_address    as bill_to_4_3_0_,
-       orderheade0_.bill_to_city       as bill_to_5_3_0_,
-       orderheade0_.bill_to_state      as bill_to_6_3_0_,
-       orderheade0_.bill_to_zip_code   as bill_to_7_3_0_,
-       orderheade0_.customer_id        as custome13_3_0_,
-       orderheade0_.order_status       as order_st8_3_0_,
-       orderheade0_.shipping_address   as shipping9_3_0_,
-       orderheade0_.shipping_city      as shippin10_3_0_,
-       orderheade0_.shipping_state     as shippin11_3_0_,
-       orderheade0_.shipping_zip_code  as shippin12_3_0_,
-       customer1_.id                   as id1_1_1_,
-       customer1_.created_date         as created_2_1_1_,
-       customer1_.last_modified_date   as last_mod3_1_1_,
-       customer1_.address              as address4_1_1_,
-       customer1_.city                 as city5_1_1_,
-       customer1_.state                as state6_1_1_,
-       customer1_.zip_code             as zip_code7_1_1_,
-       customer1_.customer_name        as customer8_1_1_,
-       customer1_.email                as email9_1_1_,
-       customer1_.phone                as phone10_1_1_,
-       orderappro2_.id                 as id1_2_2_,
-       orderappro2_.created_date       as created_2_2_2_,
-       orderappro2_.last_modified_date as last_mod3_2_2_,
-       orderappro2_.approved_by        as approved4_2_2_,
-       orderappro2_.order_header_id    as order_he5_2_2_
-from order_header orderheade0_
-         left outer join customer customer1_ on orderheade0_.customer_id = customer1_.id
-         left outer join order_approval orderappro2_ on orderheade0_.id = orderappro2_.order_header_id
-where orderheade0_.id = ?;
+-- EAGER FETCHING
+select
+        oh1_0.id                ,
+        oh1_0.bill_to_address   ,
+        oh1_0.bill_to_city      ,
+        oh1_0.bill_to_state     ,
+        oh1_0.bill_to_zip_code  ,
+        oh1_0.created_date      ,
+        c1_0.id                 ,
+        c1_0.address            ,
+        c1_0.city               ,
+        c1_0.state              ,
+        c1_0.zip_code           ,
+        c1_0.created_date       ,
+        c1_0.customer_name      ,
+        c1_0.email              ,
+        c1_0.last_modified_date ,
+        c1_0.phone              ,
+        oh1_0.last_modified_date,
+        oa1_0.id                ,
+        oa1_0.approved_by       ,
+        oa1_0.created_date      ,
+        oa1_0.last_modified_date,
+        oh1_0.order_status      ,
+        oh1_0.shipping_address  ,
+        oh1_0.shipping_city     ,
+        oh1_0.shipping_state    ,
+        oh1_0.shipping_zip_code
+from
+        order_header oh1_0
+left join
+        customer c1_0
+on
+        c1_0.id=oh1_0.customer_id
+left join
+        order_approval oa1_0
+on
+        oh1_0.id=oa1_0.order_header_id
+where
+        oh1_0.id=?
 
-select orderheade0_.id                 as id1_3_0_,
-       orderheade0_.created_date       as created_2_3_0_,
-       orderheade0_.last_modified_date as last_mod3_3_0_,
-       orderheade0_.bill_to_address    as bill_to_4_3_0_,
-       orderheade0_.bill_to_city       as bill_to_5_3_0_,
-       orderheade0_.bill_to_state      as bill_to_6_3_0_,
-       orderheade0_.bill_to_zip_code   as bill_to_7_3_0_,
-       orderheade0_.customer_id        as custome13_3_0_,
-       orderheade0_.order_status       as order_st8_3_0_,
-       orderheade0_.shipping_address   as shipping9_3_0_,
-       orderheade0_.shipping_city      as shippin10_3_0_,
-       orderheade0_.shipping_state     as shippin11_3_0_,
-       orderheade0_.shipping_zip_code  as shippin12_3_0_,
-       orderappro1_.id                 as id1_2_1_,
-       orderappro1_.created_date       as created_2_2_1_,
-       orderappro1_.last_modified_date as last_mod3_2_1_,
-       orderappro1_.approved_by        as approved4_2_1_,
-       orderappro1_.order_header_id    as order_he5_2_1_
-from order_header orderheade0_
-         left outer join order_approval orderappro1_ on orderheade0_.id = orderappro1_.order_header_id
-where orderheade0_.id = ?;
+-- LAZY FETCHING
+select
+        oh1_0.id                ,
+        oh1_0.bill_to_address   ,
+        oh1_0.bill_to_city      ,
+        oh1_0.bill_to_state     ,
+        oh1_0.bill_to_zip_code  ,
+        oh1_0.created_date      ,
+        oh1_0.customer_id       ,
+        oh1_0.last_modified_date,
+        oa1_0.id                ,
+        oa1_0.approved_by       ,
+        oa1_0.created_date      ,
+        oa1_0.last_modified_date,
+        oh1_0.order_status      ,
+        oh1_0.shipping_address  ,
+        oh1_0.shipping_city     ,
+        oh1_0.shipping_state    ,
+        oh1_0.shipping_zip_code
+from
+        order_header oh1_0 left join order_approval oa1_0
+on
+        oh1_0.id=oa1_0.order_header_id
+where
+        oh1_0.id=?
 
-select customer0_.id                 as id1_1_0_,
-       customer0_.created_date       as created_2_1_0_,
-       customer0_.last_modified_date as last_mod3_1_0_,
-       customer0_.address            as address4_1_0_,
-       customer0_.city               as city5_1_0_,
-       customer0_.state              as state6_1_0_,
-       customer0_.zip_code           as zip_code7_1_0_,
-       customer0_.customer_name      as customer8_1_0_,
-       customer0_.email              as email9_1_0_,
-       customer0_.phone              as phone10_1_0_
-from customer customer0_
-where customer0_.id = ?
-
+select
+        c1_0.id                ,
+        c1_0.address           ,
+        c1_0.city              ,
+        c1_0.state             ,
+        c1_0.zip_code          ,
+        c1_0.created_date      ,
+        c1_0.customer_name     ,
+        c1_0.email             ,
+        c1_0.last_modified_date,
+        c1_0.phone
+from
+        customer c1_0
+where
+        c1_0.id=?
 
