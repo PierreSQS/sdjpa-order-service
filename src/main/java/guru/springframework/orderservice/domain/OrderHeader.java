@@ -22,7 +22,7 @@ import java.util.Set;
  */
 @Entity
 @AttributeOverride(
-        name = "shippingAddress.address",
+        name = "shippingAddress.street",
         column = @Column(name = "shipping_address")
 )
 @AttributeOverride(
@@ -38,7 +38,7 @@ import java.util.Set;
         column = @Column(name = "shipping_zip_code")
 )
 @AttributeOverride(
-        name = "billToAddress.address",
+        name = "billToAddress.street",
         column = @Column(name = "bill_to_address")
 )
 @AttributeOverride(

@@ -55,14 +55,14 @@ class DataLoadTest {
         OrderHeader orderHeader = orderHeaderRepository.findById(id).orElse(null);
 
         Address billTo = new Address();
-        billTo.setAddress("Bill me");
+        billTo.setStreet("Bill me");
 
         assert orderHeader != null;
         orderHeader.setBillToAddress(billTo);
         orderHeaderRepository.saveAndFlush(orderHeader);
 
         System.out.println("I updated the order");
-        assertThat(orderHeader.getBillToAddress().getAddress()).isEqualTo("Bill me");
+        assertThat(orderHeader.getBillToAddress().getStreet()).isEqualTo("Bill me");
     }
 
     @Test
@@ -137,7 +137,7 @@ class DataLoadTest {
                     c1.setCustomerName(customerName);
                     c1.setEmail("test@example.com");
                     Address address = new Address();
-                    address.setAddress("123 Main");
+                    address.setStreet("123 Main");
                     address.setCity("New Orleans");
                     address.setState("LA");
                     c1.setAddress(address);
