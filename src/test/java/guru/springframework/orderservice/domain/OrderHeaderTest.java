@@ -2,7 +2,8 @@ package guru.springframework.orderservice.domain;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class OrderHeaderTest {
 
@@ -15,6 +16,8 @@ class OrderHeaderTest {
         oh2.setId(1L);
 
         assert oh1.equals(oh2);
+
+        assertThat(oh1).isEqualTo(oh2);
     }
 
     @Test
@@ -25,6 +28,6 @@ class OrderHeaderTest {
         OrderHeader oh2 = new OrderHeader();
         oh2.setId(3L);
 
-        assertFalse( oh1.equals(oh2));
+        assertNotEquals(oh1, oh2);
     }
 }

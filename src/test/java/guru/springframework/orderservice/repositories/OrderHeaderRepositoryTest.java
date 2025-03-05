@@ -86,6 +86,7 @@ class OrderHeaderRepositoryTest {
 
         OrderHeader fetchedOrder = orderHeaderRepository.findById(savedOrder.getId()).orElse(null);
 
+        assert fetchedOrder != null;
         assertThat(fetchedOrder.getOrderApproval())
                 .extracting("approvedBy")
                 .isEqualTo("Pierrot");

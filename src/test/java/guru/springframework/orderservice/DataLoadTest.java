@@ -18,18 +18,20 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
- * Modified by Pierrot on 7/26/22.
+ * Modified by Pierrot on 05-03-2025.
  */
 @ActiveProfiles("local")
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class DataLoadTest {
-    final String PRODUCT_D1 = "Product 1";
-    final String PRODUCT_D2 = "Product 2";
-    final String PRODUCT_D3 = "Product 3";
+class DataLoadTest {
+    final String product1 = "Product 1";
+    final String product2 = "Product 2";
+    final String product3 = "Product 3";
 
-    final String TEST_CUSTOMER = "TEST CUSTOMER";
+    final String testCustomer = "TEST CUSTOMER";
 
     @Autowired
     OrderHeaderRepository orderHeaderRepo;
@@ -43,7 +45,7 @@ public class DataLoadTest {
     @Test
     void testN_PlusOneProblem() {
         Customer customer = customerRepo.
-                findCustomerByCustomerNameIgnoreCase(TEST_CUSTOMER).orElse(null);
+                findCustomerByCustomerNameIgnoreCase(testCustomer).orElse(null);
 
         IntSummaryStatistics totalOrdered = orderHeaderRepo.findAllByCustomer(customer)
                 .stream()
@@ -52,13 +54,17 @@ public class DataLoadTest {
 
         System.out.printf("%n####### total ordered: %s #######%n%n", totalOrdered.getSum());
 
+        assertThat(totalOrdered.getSum()).isGreaterThan(0);
+
     }
 
     @Test
     void testLazyVsEager() {
         OrderHeader orderHeader = orderHeaderRepo.findById(5L).orElse(null);
+        assert orderHeader != null;
         System.out.printf("%n##### Order ID: %d%n",orderHeader.getId());
         System.out.printf("##### Customer Name: %s%n%n",orderHeader.getCustomer().getCustomerName());
+        assertThat(orderHeader.getId()).isNotNull();
     }
 
     @Disabled("Disabled for convenience reasons, feel free to enable it if needed!!!")
@@ -76,6 +82,8 @@ public class DataLoadTest {
         }
 
         orderHeaderRepo.flush();
+
+        assertThat(orderHeaderRepo.count()).isEqualTo(ordersToCreate);
     }
 
     private OrderHeader saveOrder(Customer customer, List<Product> products){
@@ -95,7 +103,7 @@ public class DataLoadTest {
     }
 
     private Customer loadCustomers() {
-        return getOrSaveCustomer(TEST_CUSTOMER);
+        return getOrSaveCustomer(testCustomer);
     }
 
     private Customer getOrSaveCustomer(String customerName) {
@@ -115,9 +123,9 @@ public class DataLoadTest {
     private List<Product> loadProducts(){
         List<Product> products = new ArrayList<>();
 
-        products.add(getOrSaveProduct(PRODUCT_D1));
-        products.add(getOrSaveProduct(PRODUCT_D2));
-        products.add(getOrSaveProduct(PRODUCT_D3));
+        products.add(getOrSaveProduct(product1));
+        products.add(getOrSaveProduct(product2));
+        products.add(getOrSaveProduct(product3));
 
         return products;
     }
