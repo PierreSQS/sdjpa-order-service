@@ -47,9 +47,7 @@ public class Address {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Address)) return false;
-
-        Address address1 = (Address) o;
+        if (!(o instanceof Address address1)) return false;
 
         if (getAddress() != null ? !getAddress().equals(address1.getAddress()) : address1.getAddress() != null)
             return false;

@@ -1,11 +1,16 @@
 package guru.springframework.orderservice.domain;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+
 import java.util.Set;
 
-import jakarta.persistence.*;
-
 /**
- * Created by jt on 12/11/21.
+ * Modified by Pierrot on 05-03-2025.
  */
 @Entity
 public class Product extends BaseEntity {
@@ -47,10 +52,8 @@ public class Product extends BaseEntity {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Product)) return false;
+        if (!(o instanceof Product product)) return false;
         if (!super.equals(o)) return false;
-
-        Product product = (Product) o;
 
         if (getDescription() != null ? !getDescription().equals(product.getDescription()) : product.getDescription() != null)
             return false;

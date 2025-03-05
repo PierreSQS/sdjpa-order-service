@@ -7,7 +7,7 @@ import jakarta.persistence.ManyToMany;
 import java.util.Set;
 
 /**
- * Created by jt on 12/15/21.
+ * Modified by Pierrot on 05-03-2025.
  */
 @Entity
 public class Category extends BaseEntity {
@@ -39,12 +39,11 @@ public class Category extends BaseEntity {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Category)) return false;
+        if (!(o instanceof Category category)) return false;
         if (!super.equals(o)) return false;
 
-        Category category = (Category) o;
-
-        return getDescription() != null ? getDescription().equals(category.getDescription()) : category.getDescription() == null;
+        return getDescription() != null ? getDescription().equals(category.getDescription())
+                : category.getDescription() == null;
     }
 
     @Override
