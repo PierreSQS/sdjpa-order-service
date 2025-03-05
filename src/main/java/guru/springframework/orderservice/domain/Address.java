@@ -3,7 +3,7 @@ package guru.springframework.orderservice.domain;
 import jakarta.persistence.Embeddable;
 
 /**
- * Created by jt on 12/11/21.
+ * Modified by Pierrot on 05.03.2025.
  */
 @Embeddable
 public class Address {
@@ -47,9 +47,7 @@ public class Address {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Address)) return false;
-
-        Address address1 = (Address) o;
+        if (!(o instanceof Address address1)) return false;
 
         if (getAddress() != null ? !getAddress().equals(address1.getAddress()) : address1.getAddress() != null)
             return false;

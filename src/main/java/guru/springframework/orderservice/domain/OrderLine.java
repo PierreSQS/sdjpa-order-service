@@ -4,7 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 
 /**
- * Created by jt on 12/14/21.
+ * Modified by Pierrot on 05.03.2025.
  */
 @Entity
 public class OrderLine extends BaseEntity {
@@ -44,14 +44,14 @@ public class OrderLine extends BaseEntity {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof OrderLine)) return false;
+        if (!(o instanceof OrderLine orderLine)) return false;
         if (!super.equals(o)) return false;
 
-        OrderLine orderLine = (OrderLine) o;
-
-        if (getQuantityOrdered() != null ? !getQuantityOrdered().equals(orderLine.getQuantityOrdered()) : orderLine.getQuantityOrdered() != null)
+        if (getQuantityOrdered() != null ? !getQuantityOrdered().equals(orderLine.getQuantityOrdered())
+                : orderLine.getQuantityOrdered() != null)
             return false;
-        if (getOrderHeader() != null ? !getOrderHeader().equals(orderLine.getOrderHeader()) : orderLine.getOrderHeader() != null)
+        if (getOrderHeader() != null ? !getOrderHeader().equals(orderLine.getOrderHeader())
+                : orderLine.getOrderHeader() != null)
             return false;
         return getProduct() != null ? getProduct().equals(orderLine.getProduct()) : orderLine.getProduct() == null;
     }
