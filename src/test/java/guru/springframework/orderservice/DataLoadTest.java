@@ -50,7 +50,7 @@ class DataLoadTest {
      */
     @Test
     void testDBLock() {
-        Long id = 55L;
+        Long id = 1L;
 
         OrderHeader orderHeader = orderHeaderRepository.findById(id).orElse(null);
 
@@ -61,7 +61,7 @@ class DataLoadTest {
         orderHeader.setBillToAddress(billTo);
         orderHeaderRepository.saveAndFlush(orderHeader);
 
-        System.out.println("I updated the order");
+        System.out.println("\n##### I updated the order #####\n");
         assertThat(orderHeader.getBillToAddress().getStreet()).isEqualTo("Bill me");
     }
 
