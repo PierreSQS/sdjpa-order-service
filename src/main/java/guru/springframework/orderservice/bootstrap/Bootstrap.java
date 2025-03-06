@@ -1,5 +1,7 @@
 package guru.springframework.orderservice.bootstrap;
 
+import guru.springframework.orderservice.domain.OrderHeader;
+import guru.springframework.orderservice.repositories.OrderHeaderRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -9,8 +11,27 @@ import org.springframework.stereotype.Component;
 @Component
 public class Bootstrap implements CommandLineRunner {
 
+    private final OrderHeaderRepository orderHeaderRepo;
+
+    public Bootstrap(OrderHeaderRepository orderHeaderRepo) {
+        this.orderHeaderRepo = orderHeaderRepo;
+    }
+
     @Override
     public void run(String... args) {
-        System.out.println("##### Hello from Bootstrap #####");
+        OrderHeader orderHeader = orderHeaderRepo.findById(1L).orElse(null);
+
+        System.out.println("### the products in the order ###");
+        assert orderHeader != null;
+        orderHeader.getOrderLines().forEach(orderLine ->
+        {
+            System.out.println(orderLine.getProduct().getDescription());
+
+            System.out.println("### the categories of the products ###");
+            orderLine.getProduct().getCategories().forEach(category ->
+                    System.out.println(category.getDescription()));
+        });
+
+
     }
 }
