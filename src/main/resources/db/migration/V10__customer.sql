@@ -26,7 +26,7 @@ insert into customer (customer_name, address, city, state, zip_code, phone, emai
             'cheeseburger@margaritville.com' );
 
 insert into customer (customer_name, address, city, state, zip_code, phone, email)
-    values ('Customer 2', '124 Rue Bell', 'Doual', 'Wouri', '42421', '307.302.3285',
+    values ('Customer 2', '124 Rue Bell', 'Douala', 'Wouri', '42421', '307.302.3285',
             'cheeseburger@margaritville.com' );
 
 update order_header set order_header.customer_id = (select id from customer limit 1);
