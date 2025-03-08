@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Modified by Pierrot on 06.03.2025.
+ * Modified by Pierrot on 08.03.2025.
  */
 @Component
 public class Bootstrap implements CommandLineRunner {
@@ -21,7 +21,11 @@ public class Bootstrap implements CommandLineRunner {
         this.orderHeaderRepo = orderHeaderRepo;
     }
 
-    private void readOrderHeader() {
+    /**
+     * Internal call. The @Transaction annotation is ignored!!!.
+     */
+    @Transactional
+    public void readOrderHeader() {
         OrderHeader orderHeader = orderHeaderRepo.findById(1L).orElse(null);
 
         log.info("### the products in the order ###");
@@ -36,7 +40,6 @@ public class Bootstrap implements CommandLineRunner {
         });
     }
 
-    @Transactional
     @Override
     public void run(String... args) {
 
