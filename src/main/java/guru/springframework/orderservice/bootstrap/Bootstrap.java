@@ -21,9 +21,7 @@ public class Bootstrap implements CommandLineRunner {
         this.orderHeaderRepo = orderHeaderRepo;
     }
 
-    @Transactional
-    @Override
-    public void run(String... args) {
+    private void readOrderHeader() {
         OrderHeader orderHeader = orderHeaderRepo.findById(1L).orElse(null);
 
         log.info("### the products in the order ###");
@@ -36,7 +34,13 @@ public class Bootstrap implements CommandLineRunner {
             orderLine.getProduct().getCategories().forEach(category ->
                     log.info(category.getDescription()));
         });
+    }
 
+    @Transactional
+    @Override
+    public void run(String... args) {
+
+        readOrderHeader();
 
     }
 }
