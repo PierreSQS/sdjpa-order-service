@@ -4,6 +4,7 @@ import guru.springframework.orderservice.domain.OrderHeader;
 import guru.springframework.orderservice.repositories.OrderHeaderRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Modified by Pierrot on 06.03.2025.
@@ -17,6 +18,7 @@ public class Bootstrap implements CommandLineRunner {
         this.orderHeaderRepo = orderHeaderRepo;
     }
 
+    @Transactional
     @Override
     public void run(String... args) {
         OrderHeader orderHeader = orderHeaderRepo.findById(1L).orElse(null);
