@@ -2,6 +2,7 @@ package guru.springframework.orderservice.bootstrap;
 
 import guru.springframework.orderservice.domain.OrderHeader;
 import guru.springframework.orderservice.repositories.OrderHeaderRepository;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class Bootstrap implements CommandLineRunner {
 
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(Bootstrap.class);
+    
     private final OrderHeaderRepository orderHeaderRepo;
 
     public Bootstrap(OrderHeaderRepository orderHeaderRepo) {
@@ -23,15 +26,15 @@ public class Bootstrap implements CommandLineRunner {
     public void run(String... args) {
         OrderHeader orderHeader = orderHeaderRepo.findById(1L).orElse(null);
 
-        System.out.println("### the products in the order ###");
+        log.info("### the products in the order ###");
         assert orderHeader != null;
         orderHeader.getOrderLines().forEach(orderLine ->
         {
-            System.out.println(orderLine.getProduct().getDescription());
+            log.info("### {} ###",orderLine.getProduct().getDescription());
 
-            System.out.println("### the categories of the products ###");
+            log.info("### the categories of the product ###");
             orderLine.getProduct().getCategories().forEach(category ->
-                    System.out.println(category.getDescription()));
+                    log.info(category.getDescription()));
         });
 
 
