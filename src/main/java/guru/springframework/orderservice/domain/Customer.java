@@ -1,14 +1,16 @@
 package guru.springframework.orderservice.domain;
 
 
+import jakarta.persistence.Version;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
+
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * Created by jt on 5/21/22.
+ * Modified by Pierrot on 26-03-2025.
  */
 @Entity
 public class Customer extends BaseEntity {
@@ -21,6 +23,8 @@ public class Customer extends BaseEntity {
     private String phone;
     private String email;
 
+    @Version
+    private Integer version;
     @OneToMany(mappedBy = "customer")
     private Set<OrderHeader> orders = new LinkedHashSet<>();
 
@@ -62,5 +66,13 @@ public class Customer extends BaseEntity {
 
     public void setOrders(Set<OrderHeader> orders) {
         this.orders = orders;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 }
