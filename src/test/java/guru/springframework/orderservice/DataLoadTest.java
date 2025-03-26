@@ -16,21 +16,22 @@ import java.util.ArrayList;
 import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
- * Created by jt on 5/28/22.
+ * Modified by Pierrot on 26-03-2025.
  */
 @ActiveProfiles("local")
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class DataLoadTest {
-    final String PRODUCT_D1 = "Product 1";
-    final String PRODUCT_D2 = "Product 2";
-    final String PRODUCT_D3 = "Product 3";
+class DataLoadTest {
+    final String product1 = "Product 1";
+    final String product2 = "Product 2";
+    final String product3 = "Product 3";
 
-    final String TEST_CUSTOMER = "TEST CUSTOMER";
+    final String testCustomer = "TEST CUSTOMER";
 
     @Autowired
     OrderHeaderRepository orderHeaderRepository;
@@ -42,48 +43,56 @@ public class DataLoadTest {
     ProductRepository productRepository;
 
     /**
-     * From MySQL Workbench (or other client, run the following SQL statment, then test below.) Once
-     * you commit, the test will complete. If test completes immediately, check autocommit settings in client.
-     *
+     * From MySQL Workbench (or other client, run the following SQL statement, then test below.) Once
+     * you commit, the test will complete.
+     * If test completes immediately, check autocommit settings in the client.
+     * <p>
      *  {@code SELECT * FROM orderservice.order_header where id = 1 for update; }
      */
     @Test
     void testDBLock() {
-        Long id = 55l;
+        Long id = 55L;
 
-        OrderHeader orderHeader = orderHeaderRepository.findById(id).get();
+        OrderHeader orderHeader = orderHeaderRepository.findById(id).orElse(null);
 
         Address billTo = new Address();
         billTo.setAddress("Bill me");
+        assert orderHeader != null;
         orderHeader.setBillToAddress(billTo);
         orderHeaderRepository.saveAndFlush(orderHeader);
 
         System.out.println("I updated the order");
+        assertThat(orderHeader.getBillToAddress()).isEqualTo(billTo);
     }
 
     @Test
     void testN_PlusOneProblem() {
 
-        Customer customer = customerRepository.findCustomerByCustomerNameIgnoreCase(TEST_CUSTOMER).get();
+        Customer customer = customerRepository.findCustomerByCustomerNameIgnoreCase(testCustomer).orElse(null);
 
         IntSummaryStatistics totalOrdered = orderHeaderRepository.findAllByCustomer(customer).stream()
                 .flatMap(orderHeader -> orderHeader.getOrderLines().stream())
-                .collect(Collectors.summarizingInt(ol -> ol.getQuantityOrdered()));
+                .collect(Collectors.summarizingInt(OrderLine::getQuantityOrdered));
 
         System.out.println("total ordered: " + totalOrdered.getSum());
+
+        assertThat(totalOrdered.getSum()).isGreaterThan(0);
     }
 
     @Test
     void testLazyVsEager() {
-        OrderHeader orderHeader = orderHeaderRepository.getById(52l);
+        OrderHeader orderHeader = orderHeaderRepository.findById(52L).orElse(null);
 
+        assert orderHeader != null;
         System.out.println("Order Id is: " + orderHeader.getId());
 
         System.out.println("Customer Name is: " + orderHeader.getCustomer().getCustomerName());
 
+        assertThat(orderHeader.getCustomer().getCustomerName()).isNotNull();
+
     }
 
-    @Disabled
+    @Disabled("Only used for loading data")
     @Rollback(value = false)
     @Test
     void testDataLoader() {
@@ -98,6 +107,8 @@ public class DataLoadTest {
         }
 
         orderHeaderRepository.flush();
+
+        assertThat(orderHeaderRepository.findAll()).hasSize(ordersToCreate);
     }
 
     private OrderHeader saveOrder(Customer customer, List<Product> products){
@@ -110,7 +121,6 @@ public class DataLoadTest {
             OrderLine orderLine = new OrderLine();
             orderLine.setProduct(product);
             orderLine.setQuantityOrdered(random.nextInt(20));
-            //orderHeader.getOrderLines().add(orderLine);
             orderHeader.addOrderLine(orderLine);
         });
 
@@ -118,7 +128,7 @@ public class DataLoadTest {
     }
 
     private Customer loadCustomers() {
-        return getOrSaveCustomer(TEST_CUSTOMER);
+        return getOrSaveCustomer(testCustomer);
     }
 
     private Customer getOrSaveCustomer(String customerName) {
@@ -138,9 +148,9 @@ public class DataLoadTest {
     private List<Product> loadProducts(){
         List<Product> products = new ArrayList<>();
 
-        products.add(getOrSaveProduct(PRODUCT_D1));
-        products.add(getOrSaveProduct(PRODUCT_D2));
-        products.add(getOrSaveProduct(PRODUCT_D3));
+        products.add(getOrSaveProduct(product1));
+        products.add(getOrSaveProduct(product2));
+        products.add(getOrSaveProduct(product3));
 
         return products;
     }
