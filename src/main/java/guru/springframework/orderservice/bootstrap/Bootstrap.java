@@ -2,54 +2,47 @@ package guru.springframework.orderservice.bootstrap;
 
 import guru.springframework.orderservice.domain.Customer;
 import guru.springframework.orderservice.repositories.CustomerRepository;
-import guru.springframework.orderservice.repositories.OrderHeaderRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 /**
- * Created by jt on 6/8/22.
+ * Modified by Pierrot on 26-03-2025.
  */
 @Component
 public class Bootstrap implements CommandLineRunner {
 
-    @Autowired
-    OrderHeaderRepository orderHeaderRepository;
+    private static final Logger logger = LoggerFactory.getLogger(Bootstrap.class);
+    public static final String VERSION_IS = "### Version is: ";
+    public static final String VERSION_MSG = "{} ###";
 
-    @Autowired
-    BootstrapOrderService bootstrapOrderService;
+    private final BootstrapOrderService bootstrapOrderService;
 
-    @Autowired
-    CustomerRepository customerRepository;
-//    @Transactional
-//    public void readOrderData(){
-//        OrderHeader orderHeader = orderHeaderRepository.findById(1L).get();
-//
-//        orderHeader.getOrderLines().forEach(ol -> {
-//            System.out.println(ol.getProduct().getDescription());
-//
-//            ol.getProduct().getCategories().forEach(cat -> {
-//                System.out.println(cat.getDescription());
-//            });
-//        });
-//    }
+    private final CustomerRepository customerRepository;
+
+    public Bootstrap(BootstrapOrderService bootstrapOrderService, CustomerRepository customerRepository) {
+        this.bootstrapOrderService = bootstrapOrderService;
+        this.customerRepository = customerRepository;
+    }
+
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         bootstrapOrderService.readOrderData();
 
         Customer customer = new Customer();
         customer.setCustomerName("Testing Version");
         Customer savedCustomer = customerRepository.save(customer);
-        System.out.println("Version is: " + savedCustomer.getVersion());
+        logger.info(VERSION_IS + VERSION_MSG, savedCustomer.getVersion());
 
         savedCustomer.setCustomerName("Testing Version 2");
         Customer savedCustomer2 = customerRepository.save(savedCustomer);
-        System.out.println("Version is: " + savedCustomer2.getVersion());
+        logger.info(VERSION_IS + VERSION_MSG, savedCustomer2.getVersion());
 
         savedCustomer2.setCustomerName("Testing Version 3");
         Customer savedCustomer3 = customerRepository.save(savedCustomer2);
-        System.out.println("Version is: " + savedCustomer3.getVersion());
+        logger.info(VERSION_IS + VERSION_MSG, savedCustomer3.getVersion());
 
         customerRepository.delete(savedCustomer3);
     }
