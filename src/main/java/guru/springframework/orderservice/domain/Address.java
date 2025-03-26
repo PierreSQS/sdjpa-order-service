@@ -1,23 +1,25 @@
 package guru.springframework.orderservice.domain;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 /**
- * Created by jt on 12/11/21.
+ * Modified by Pierrot on 26-03-2025.
  */
 @Embeddable
 public class Address {
-    private String address;
+    @Column(name = "address",insertable = false, updatable = false)
+    private String street;
     private String city;
     private String state;
     private String zipCode;
 
-    public String getAddress() {
-        return address;
+    public String getStreet() {
+        return street;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setStreet(String street) {
+        this.street = street;
     }
 
     public String getCity() {
@@ -51,7 +53,7 @@ public class Address {
 
         Address address1 = (Address) o;
 
-        if (getAddress() != null ? !getAddress().equals(address1.getAddress()) : address1.getAddress() != null)
+        if (getStreet() != null ? !getStreet().equals(address1.getStreet()) : address1.getStreet() != null)
             return false;
         if (getCity() != null ? !getCity().equals(address1.getCity()) : address1.getCity() != null) return false;
         if (getState() != null ? !getState().equals(address1.getState()) : address1.getState() != null) return false;
@@ -60,7 +62,7 @@ public class Address {
 
     @Override
     public int hashCode() {
-        int result = getAddress() != null ? getAddress().hashCode() : 0;
+        int result = getStreet() != null ? getStreet().hashCode() : 0;
         result = 31 * result + (getCity() != null ? getCity().hashCode() : 0);
         result = 31 * result + (getState() != null ? getState().hashCode() : 0);
         result = 31 * result + (getZipCode() != null ? getZipCode().hashCode() : 0);

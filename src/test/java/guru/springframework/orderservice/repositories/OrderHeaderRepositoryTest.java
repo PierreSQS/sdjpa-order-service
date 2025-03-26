@@ -124,7 +124,7 @@ class OrderHeaderRepositoryTest {
 
         Long savedOrderId = savedOrder.getId();
         assertThrows(EntityNotFoundException.class, () ->
-                orderHeaderRepository.findById(savedOrderId).orElse(null));
+                orderHeaderRepository.findById(savedOrderId).orElseThrow(EntityNotFoundException::new));
 
     }
 
